@@ -11,10 +11,6 @@
     "package": "ncc build --source-map --license licenses.txt",
     "all": "npm run build && npm run package && npm run format"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bayrakmustafa/actions-codesign.git"
-  },
   "keywords": [
     "actions",
     "node",
