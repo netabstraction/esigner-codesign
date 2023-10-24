@@ -217,13 +217,16 @@ class CodeSigner {
             (0, util_1.listFiles)(workingPath);
             let link = (0, util_1.getPlatform)() == constants_1.WINDOWS ? constants_1.CODESIGNTOOL_WINDOWS_SETUP : constants_1.CODESIGNTOOL_UNIX_SETUP;
             let cmd = (0, util_1.getPlatform)() == constants_1.WINDOWS ? constants_1.CODESIGNTOOL_WINDOWS_RUN_CMD : constants_1.CODESIGNTOOL_UNIX_RUN_CMD;
-            core.info(`Downloading CodeSignTool from ${link}`);
             const codesigner = path_1.default.resolve(process.cwd(), 'codesign');
-            core.info(`Creating CodeSignTool extract path ${codesigner}`);
-            (0, fs_1.mkdirSync)(codesigner);
+            if ((0, fs_1.existsSync)(codesigner)) {
+                core.info(`Creating CodeSignTool extract path ${codesigner}`);
+                (0, fs_1.mkdirSync)(codesigner);
+            }
+            core.info(`Downloading CodeSignTool from ${link}`);
             const downloadedFile = yield tc.downloadTool(link);
-            const extractedCodeSignPath = yield (0, util_1.extractZip)(downloadedFile, codesigner);
             core.info(`Extract CodeSignTool from download path ${downloadedFile} to ${codesigner}`);
+            const extractedCodeSignPath = yield (0, util_1.extractZip)(downloadedFile, codesigner);
+            core.info(extractedCodeSignPath);
             const archiveName = fs_1.default.readdirSync(extractedCodeSignPath)[0];
             const archivePath = path_1.default.join(extractedCodeSignPath, archiveName);
             core.info(`Archive name: ${archiveName}, ${archivePath}`);

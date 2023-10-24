@@ -26,15 +26,19 @@ export class CodeSigner {
 
         let link = getPlatform() == WINDOWS ? CODESIGNTOOL_WINDOWS_SETUP : CODESIGNTOOL_UNIX_SETUP;
         let cmd = getPlatform() == WINDOWS ? CODESIGNTOOL_WINDOWS_RUN_CMD : CODESIGNTOOL_UNIX_RUN_CMD;
-        core.info(`Downloading CodeSignTool from ${link}`);
 
         const codesigner = path.resolve(process.cwd(), 'codesign');
-        core.info(`Creating CodeSignTool extract path ${codesigner}`);
-        mkdirSync(codesigner);
+        if (existsSync(codesigner)) {
+            core.info(`Creating CodeSignTool extract path ${codesigner}`);
+            mkdirSync(codesigner);
+        }
 
+        core.info(`Downloading CodeSignTool from ${link}`);
         const downloadedFile = await tc.downloadTool(link);
-        const extractedCodeSignPath = await extractZip(downloadedFile, codesigner);
+
         core.info(`Extract CodeSignTool from download path ${downloadedFile} to ${codesigner}`);
+        const extractedCodeSignPath = await extractZip(downloadedFile, codesigner);
+        core.info(extractedCodeSignPath);
 
         const archiveName = fs.readdirSync(extractedCodeSignPath)[0];
         const archivePath = path.join(extractedCodeSignPath, archiveName);
