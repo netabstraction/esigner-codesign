@@ -28,7 +28,7 @@ export class CodeSigner {
         let cmd = getPlatform() == WINDOWS ? CODESIGNTOOL_WINDOWS_RUN_CMD : CODESIGNTOOL_UNIX_RUN_CMD;
 
         const codesigner = path.resolve(process.cwd(), 'codesign');
-        if (existsSync(codesigner)) {
+        if (!existsSync(codesigner)) {
             core.info(`Creating CodeSignTool extract path ${codesigner}`);
             mkdirSync(codesigner);
         }
